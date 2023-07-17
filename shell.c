@@ -34,8 +34,7 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 	int read = 0, status;
 	size_t size = 1024;
 	pid_t pid;
-	/*int line = 1;*/
-	char *buffer, **argv;
+	char *buffer, **argv, *cmd;
 
 	if (ac != 1)
 		return (-1);
@@ -52,6 +51,17 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 		{
 			free(buffer), free(argv);
 			continue;
+		}
+		if (!_strchr(argv[0], '/'))
+		{
+			cmd = _which(argv[0], envp);
+			if (!cmd)
+			{
+				free(buffer), free(argv);
+				continue;
+			}
+			else
+				argv[0] = cmd;
 		}
 		pid = fork();
 		if (pid != 0)
