@@ -10,14 +10,34 @@
 
 char *_getenv(const char *name, char **environ)
 {
-	char *key;
-	int i = 0;
+	unsigned int i = 0, j, k = 0, m = 0;
+	char *value;
 
-	while(environ[i])
+	while (environ[i])
 	{
-		key = strtok(environ[i], "=");
-		if (strcmp(key, name) == 0)
-			return (strtok(NULL, "\n"));
+		j = 0;
+		while (environ[i][j] == name[j])
+		{
+			if (environ[i][j + 1] == '=')
+			{
+				j += 2;
+				m = j;
+				k = 0;
+				while (environ[i][m])
+					m++, k++;
+				value = malloc(sizeof(char) * k);
+				if (!value)
+					perror("malloc"), exit(EXIT_FAILURE);
+				m = 0;
+				while (environ[i][j])
+				{
+					value[m] = environ[i][j];
+					j++, m++;
+				}
+				return (value);
+			}
+			j++;
+		}
 		i++;
 	}
 	return (NULL);

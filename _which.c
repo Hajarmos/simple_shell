@@ -20,13 +20,17 @@ char *_which(char *cmdname, char **envp)
 		if (!cmdpath)
 			perror("malloc"), exit(EXIT_FAILURE);
 		_strcpy(cmdpath, token);
-		_strcat(cmdpath,"/");
+		_strcat(cmdpath, "/");
 		_strcat(cmdpath, cmdname);
 		if (stat(cmdpath, &st) == 0)
+		{
+			free(path);
 			return (cmdpath);
+		}
 		free(cmdpath);
 		token = strtok(NULL, ":");
 	}
+	free(path);
 	write(1, cmdname, _strlen(cmdname));
 	write(1, ": command not found\n", 20);
 	return (NULL);

@@ -4,23 +4,6 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #define _GNU_SOURCE
-
-/**
- * free_arr - frees a 2 dimensional grid previously created
- * @array: array
- * Return: nothing
- */
-void free_arr(char **array)
-{
-        int i, len = 0;
-
-        while (array[len])
-                len++;
-        for (i = 0; i < len; i++)
-                free(array[i]);
-        i++;
-        free(array);
-}
 /**
  * main - simple shell
  * @ac: arg number
@@ -34,7 +17,7 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 	int read = 0, status;
 	size_t size = 1024;
 	pid_t pid;
-	char *buffer, **argv, *cmd;
+	char *buffer, **argv, *cmd = NULL;
 
 	if (ac != 1)
 		return (-1);
@@ -60,8 +43,7 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 				free(buffer), free(argv);
 				continue;
 			}
-			else
-				argv[0] = cmd;
+			argv[0] = cmd;
 		}
 		pid = fork();
 		if (pid != 0)
@@ -74,12 +56,16 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 		{
 			if (execve(argv[0], argv, envp) == -1)
 			{
-				perror("./shell");
+				perror(av[0]);
 				free(buffer), free(argv);
+				if (cmd)
+					free(cmd);
 				continue;
 			}
 		}
 		free(buffer), free(argv);
+		if (cmd)
+			free(cmd);
 		if (!isatty(STDIN_FILENO))
 			exit(EXIT_SUCCESS);
 	}

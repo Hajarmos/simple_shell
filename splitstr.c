@@ -14,7 +14,7 @@ char **splitstr(char *str)
 	char **array = malloc(sizeof(char *) * 1024);
 
 	token = strtok(str, " \t\n");
-	while(token)
+	while (token)
 	{
 		array[i] = token;
 		i++;
