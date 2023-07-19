@@ -19,4 +19,7 @@ char **splitstr(char *buffer);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+void builtin(char *cmd, char *cmd2, char **environ);
+char *readline(size_t size);
+
 #endif
