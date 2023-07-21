@@ -14,7 +14,6 @@
 
 int main(int ac, char **av __attribute__((unused)), char **envp)
 {
-	int status;
 	size_t size = 1024;
 	pid_t pid;
 	char *buffer = NULL, **argv, *cmd = NULL;
@@ -43,27 +42,14 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 			}
 			argv[0] = cmd;
 		}
-		pid = fork();
-		if (pid != 0)
+		if (exec(argv, envp) == -1)
 		{
-			if (pid == -1)
-				perror("Error");
-			wait(&status);
-		}
-		if (!pid)
-		{
-			if (execve(argv[0], argv, envp) == -1)
-			{
-				perror(av[0]);
-				free(buffer), free(argv);
-				if (cmd)
-					free(cmd);
-				continue;
-			}
+			perror(av[0]), free(buffer), free(argv);
+			if (cmd)
+				free(cmd);
+			continue;
 		}
 		free(buffer), free(argv);
-		/*if (cmd)
-			free(cmd);*/
 		if (!isatty(STDIN_FILENO))
 			exit(EXIT_SUCCESS);
 	}
