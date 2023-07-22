@@ -15,7 +15,6 @@
 int main(int ac, char **av __attribute__((unused)), char **envp)
 {
 	size_t size = 1024;
-	pid_t pid;
 	char *buffer = NULL, **argv, *cmd = NULL;
 
 	if (ac != 1)
@@ -44,7 +43,8 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 		}
 		if (exec(argv, envp) == -1)
 		{
-			perror(av[0]), free(buffer), free(argv);
+			perror(av[0]);
+			free(buffer), free(argv);
 			if (cmd)
 				free(cmd);
 			continue;
