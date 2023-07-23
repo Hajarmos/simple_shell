@@ -50,8 +50,6 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 			continue;
 		}
 		free(buffer), free(argv);
-		if (!isatty(STDIN_FILENO))
-			exit(EXIT_SUCCESS);
 	}
 	return (0);
 }
