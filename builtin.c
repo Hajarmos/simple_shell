@@ -21,7 +21,7 @@ int builtin(char **cmd, char **environ)
 		}
 		return (0);
 	}
-	if (_strcmp(cmd[0], "env") == 0)
+	else if (_strcmp(cmd[0], "env") == 0)
 	{
 		if (!cmd[1])
 		{
@@ -30,8 +30,15 @@ int builtin(char **cmd, char **environ)
 				write(1, environ[i], _strlen(environ[i]));
 				i++;
 			}
+			write(1, "\n", 1);
 		}
-		perror("env");
+		else
+		{
+			write(1, cmd[0], _strlen(cmd[0]));
+			write(1, ": '", 3);
+			write(1, cmd[1], _strlen(cmd[1]));
+			write(1, "’: No such file or directory\n", 31);
+		}
 		return (-2);
 	}
 	return (-1);
