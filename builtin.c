@@ -28,6 +28,11 @@ void exit_error(char *progname, char *str)
 {
 	write(1, progname, _strlen(progname));
 	write(1, ": exit: ", 8);
+	if (is_number(str))
+	{
+		write(1, "too many arguments\n", 19);
+		return;
+	}
 	write(1, str, _strlen(str));
 	write(1, ": numeric argument required\n", 28);
 }
@@ -45,12 +50,17 @@ int builtin(char **cmd, char **environ, char *progname)
 
 	if (_strcmp(cmd[0], "exit") == 0)
 	{
-		if (cmd[1] != NULL)
+		if (cmd[1])
 		{
 			if (is_number(cmd[1]))
 			{
-				ex = _atoi(cmd[1]);
-				return (ex);
+				if (!cmd[2])
+				{
+					ex = _atoi(cmd[1]);
+					return (ex);
+				}
+				exit_error(progname, cmd[1]);
+				return (-3);
 			}
 			else
 			{
