@@ -1,14 +1,45 @@
 #include "main.h"
 #include <stdio.h>
+/**
+ * is_number - check the string is number
+ * @s: string
+ * Return: 1if is number or 0 if not
+ */
 
+int is_number(char *s)
+{
+	int i = 0;
+
+	while (*(s + i))
+	{
+		if (*(s + i) <= 57 && *(s + i) >= 48)
+			i++;
+		else
+			return (0);
+	}
+	return (1);
+}
+/**
+ * exit_error - print exit error
+ *
+ * Return: nothing
+ */
+void exit_error(char *progname, char *str)
+{
+	write(1, progname, _strlen(progname));
+	write(1, ": exit: ", 8);
+	write(1, str, _strlen(str));
+	write(1, ": numeric argument required\n", 28);
+}
 /**
  * builtin - checks for builtin command
  * @cmd: buffer to check
  * @environ: environment
+ * @progname: programme name
  * Return: 1 for exit, 0 for env, -1 for neither
 */
 
-int builtin(char **cmd, char **environ)
+int builtin(char **cmd, char **environ, char *progname)
 {
 	int ex, i = 0;
 
@@ -16,8 +47,16 @@ int builtin(char **cmd, char **environ)
 	{
 		if (cmd[1] != NULL)
 		{
-			ex = _atoi(cmd[1]);
-			return (ex);
+			if (is_number(cmd[1]))
+			{
+				ex = _atoi(cmd[1]);
+				return (ex);
+			}
+			else
+			{
+				exit_error(progname, cmd[1]);
+				return (2);
+			}
 		}
 		return (0);
 	}

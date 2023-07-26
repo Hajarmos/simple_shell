@@ -11,7 +11,7 @@
 char *_which(char *cmdname, char **envp, char *progname, unsigned int i);
 char *_getenv(const char *name, char **environ);
 char **splitstr(char *buffer);
-int builtin(char **cmd, char **environ);
+int builtin(char **cmd, char **environ, char *progname);
 char *readline(size_t size);
 int exec(char **argv, char *progname, char **envp, unsigned int i);
 void error_non_inter(char *cmdname, char *pgmname, unsigned int i);

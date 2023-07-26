@@ -33,7 +33,7 @@ int main(int ac, char **av, char **envp)
 			free(buffer), free(argv);
 			continue;
 		}
-		built = builtin(argv, envp);
+		built = builtin(argv, envp, av[0]);
 		if (built != -1)
 		{
 			free(buffer), free(argv);
