@@ -12,10 +12,12 @@
  * Return: it's a loop
  */
 
-int main(int ac, char **av __attribute__((unused)), char **envp)
+int main(int ac, char **av, char **envp)
 {
 	size_t size = 1024;
-	char *buffer = NULL, **argv, *cmd = NULL;
+	char *buffer = NULL, **argv;
+	unsigned int i = 0;
+	int built, exe;
 
 	if (ac != 1)
 		return (-1);
@@ -24,30 +26,29 @@ int main(int ac, char **av __attribute__((unused)), char **envp)
 		if (isatty(STDIN_FILENO))
 			write(1, "$ ", 2);
 		buffer = readline(size);
-		builtin(buffer, cmd, envp);
 		argv = splitstr(buffer);
+		i++;
 		if (!argv[0])
 		{
 			free(buffer), free(argv);
 			continue;
 		}
-		if (!_strchr(argv[0], '/'))
+		built = builtin(argv, envp);
+		if (built != -1)
 		{
-			cmd = _which(argv[0], envp);
-			if (!cmd)
-			{
-				free(buffer), free(argv);
-				continue;
-			}
-			argv[0] = cmd;
-		}
-		if (exec(argv, envp) == -1)
-		{
-			perror(av[0]);
 			free(buffer), free(argv);
-			if (cmd)
-				free(cmd);
+			if (built > -1)
+				exit(built);
 			continue;
+		}
+		exe = exec(argv, av[0], envp, i);
+		if (exe != 0)
+		{
+			free(buffer), free(argv);
+			if (exe == -1)
+				continue;
+			else
+				exit(EXIT_SUCCESS);
 		}
 		free(buffer), free(argv);
 	}

@@ -4,28 +4,35 @@
 /**
  * builtin - checks for builtin command
  * @cmd: buffer to check
- * @cmd2: command
  * @environ: environment
+ * Return: 1 for exit, 0 for env, -1 for neither
 */
 
-void builtin(char *cmd, char *cmd2, char **environ)
+int builtin(char **cmd, char **environ)
 {
-	int i = 0;
+	int ex, i = 0;
 
-	if (_strcmp(cmd, "exit") == 0)
+	if (_strcmp(cmd[0], "exit") == 0)
 	{
-		if (cmd)
-			free(cmd);
-		if (cmd2)
-			free(cmd2);
-		exit(EXIT_SUCCESS);
-	}
-	if (_strcmp(cmd, "env") == 0)
-	{
-		while (environ[i])
+		if (cmd[1] != NULL)
 		{
-			write(1, environ[i], _strlen(environ[i]));
-			i++;
+			ex = _atoi(cmd[1]);
+			return (ex);
 		}
+		return (0);
 	}
+	if (_strcmp(cmd[0], "env") == 0)
+	{
+		if (!cmd[1])
+		{
+			while (environ[i])
+			{
+				write(1, environ[i], _strlen(environ[i]));
+				i++;
+			}
+		}
+		perror("env");
+		return (-2);
+	}
+	return (-1);
 }

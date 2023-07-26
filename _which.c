@@ -4,11 +4,12 @@
  * _which - find path of command
  * @cmdname: name of command
  * @envp: environment
- *
+ * @progname: programme name
+ * @i: line index
  * Return: path of command if exist
  */
 
-char *_which(char *cmdname, char **envp)
+char *_which(char *cmdname, char **envp, char *progname, unsigned int i)
 {
 	char *path = _getenv("PATH", envp), *token, *cmdpath;
 	struct stat st;
@@ -31,7 +32,12 @@ char *_which(char *cmdname, char **envp)
 		token = strtok(NULL, ":");
 	}
 	free(path);
-	write(1, cmdname, _strlen(cmdname));
-	write(1, ": command not found\n", 20);
+	if (!isatty(STDIN_FILENO))
+		error_non_inter(cmdname, progname, i);
+	else
+	{
+		write(1, cmdname, _strlen(cmdname));
+		write(1, ": command not found\n", 20);
+	}
 	return (NULL);
 }

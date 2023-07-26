@@ -100,24 +100,21 @@ int _atoi(char *s)
 
 char *_strdup(char *str)
 {
-	int i = 0, len = 0, n;
+	int len, i = 0;
 	char *strcp;
 
 	if (str == NULL)
 		return (NULL);
-	while (*(str + len))
-		len++;
-
-	n = sizeof(char) * (len + 1);
-
-	strcp = malloc(n);
+	len = _strlen(str) + 1;
+	strcp = malloc(len);
 
 	if (strcp == NULL)
 		return (NULL);
-	while (*(str + i))
+	while (str[i])
 	{
-		*(strcp + i) = *(str + i);
+		strcp[i] = str[i];
 		i++;
 	}
+	strcp[i] = '\0';
 	return (strcp);
 }
