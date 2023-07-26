@@ -1,5 +1,4 @@
 #include "main.h"
-#include "errno.h"
 #include "stdio.h"
 /**
  * error_non_inter - write error in non-interactive mode

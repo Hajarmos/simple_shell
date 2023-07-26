@@ -21,6 +21,8 @@ int is_number(char *s)
 }
 /**
  * exit_error - print exit error
+ * @progname: program name
+ * @str: string
  *
  * Return: nothing
  */
@@ -75,16 +77,11 @@ int builtin(char **cmd, char **environ, char *progname)
 		if (!cmd[1])
 		{
 			while (environ[i])
-			{
-				write(1, environ[i], _strlen(environ[i]));
-				write(1, "\n", 1);
-				i++;
-			}
+				write(1, environ[i], _strlen(environ[i])), write(1, "\n", 1), i++;
 		}
 		else
 		{
-			write(1, cmd[0], _strlen(cmd[0]));
-			write(1, ": '", 3);
+			write(1, cmd[0], _strlen(cmd[0])), write(1, ": '", 3);
 			write(1, cmd[1], _strlen(cmd[1]));
 			write(1, "’: No such file or directory\n", 31);
 		}
